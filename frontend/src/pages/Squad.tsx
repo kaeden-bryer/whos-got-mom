@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { API_URL } from '../config/env';
 
 export default function Squad() {
   const { id } = useParams<{ id: string }>();
@@ -7,7 +8,7 @@ export default function Squad() {
 
   useEffect(() => {
     // Make API call to /test endpoint
-    fetch('http://localhost:8000/test')
+    fetch(`${API_URL}/test`)
       .then(response => response.json())
       .then(data => setMessage(data))
       .catch(error => {
