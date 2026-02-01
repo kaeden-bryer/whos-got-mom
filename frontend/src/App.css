@@ -2,7 +2,7 @@
   max-width: 1280px;
   margin: 0 auto;
   /* add top offset so fixed navbar doesn't cover content (navbar ~64px) */
-  padding: calc(2rem + 64px) 2rem 2rem 2rem;
+  /* padding: calc(2rem + 64px) 2rem 2rem 2rem; */
 }
 
 h1 {
@@ -76,3 +76,5 @@ a:hover {
   display: flex;
   justify-content: center;
 }
+
+/* Landing page styles */

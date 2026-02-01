@@ -4,19 +4,20 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Squad from './pages/Squad';
 import NotFound from './pages/NotFound';
+import Landing from './pages/Landing';
 import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/squad" replace />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/squad" element={<Squad />} />
         <Route path="/not-found" element={<NotFound />} />
-        <Route path="*" element={<Navigate to="/not-found" replace />} />
+        <Route path="*" element={<Navigate to="/Landing" replace />} />
       </Routes>
     </BrowserRouter>
   );
