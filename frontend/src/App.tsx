@@ -1,28 +1,30 @@
 // import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css'
-import Login from './Login';
-
+import Header from './components_login/Header'
+import Username from './components_login/Username'
+import Password from './components_login/Password'
+import Create_account from './Create_account';
 
 function App() {
-  // const [count, setCount] = useState(0)
+  
 
   return (
-    <>
+    <div>
+        <Header/>
+        <Username/>
+        <Password/>
+    
       <BrowserRouter>
-      {/* Navigation */}
       <nav>
-        <Link to="/login">Login</Link> |{" "}
-        <Link to="/create_account">Create account</Link>{" "}
-      </nav>
-
-      {/* Routes */}
+          <h5>Don't have an account? <Link to="/create_account">Sign up</Link>{" "}</h5>
+        </nav>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/create_account" element={<Create_account/>} />
       </Routes>
     </BrowserRouter>
-    </>
+    </div>
   )
 }
 
-export default App
+export default App;

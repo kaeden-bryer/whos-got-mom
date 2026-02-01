@@ -6,9 +6,9 @@ function Username() {
 
 
     return (
-    <div>
+    <div id="username">
         <form>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+            <input type="text" placeholder="Email or Phone #" value={name} onChange={(e) => setName(e.target.value)} />
         </form>
     </div>
     );

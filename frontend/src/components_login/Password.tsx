@@ -1,3 +1,4 @@
+import './Link.css'
 import {useState} from 'react';
 
 
@@ -6,9 +7,9 @@ function Password() {
 
 
     return (
-    <div>
+    <div id="password">
         <form>
-            <input type="text" value={password} onChange={(e) => setName(e.target.value)} />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setName(e.target.value)} />
         </form>
     </div>
     );
