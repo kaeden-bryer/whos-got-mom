@@ -179,3 +179,337 @@ label {
 hr {
 border-top: 2px solid #fe696e;
 }
+
+/* Dashboard Section Title */
+.section-title {
+  color: #343434;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Squads Grid */
+.squads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Squad Card */
+.squad-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.squad-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.squad-name {
+  color: #343434;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.squad-mom {
+  color: #666;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Create Squad Card */
+.create-squad-card {
+  background: linear-gradient(145deg, #fe696e, #ff8a8e);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(254, 105, 110, 0.3);
+}
+
+.create-squad-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(254, 105, 110, 0.4);
+}
+
+.plus-icon {
+  font-size: 3rem;
+  color: white;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.create-text {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  color: #343434;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.modal-content form {
+  max-width: 100%;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-direction: row !important;
+}
+
+.modal-buttons button {
+  flex: 1;
+}
+
+.cancel-btn {
+  background-color: #6c757d !important;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268 !important;
+}
+
+/* Clickable squad card */
+.squad-card.clickable {
+  cursor: pointer;
+}
+
+/* Empty Squad State */
+.empty-squad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.empty-squad h1 {
+  color: #343434;
+  margin-bottom: 0.5rem;
+}
+
+.empty-squad p {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+/* Large Add People Button */
+.add-people-btn-large {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 3rem;
+  background: linear-gradient(145deg, #fe696e, #ff8a8e);
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(254, 105, 110, 0.4);
+}
+
+.add-people-btn-large:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(254, 105, 110, 0.5);
+}
+
+.plus-icon-large {
+  font-size: 4rem;
+  color: white;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.add-people-btn-large span:last-child {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Add People Button (below wheel) */
+.add-people-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.add-people-btn {
+  padding: 0.75rem 2rem;
+  background-color: #fe696e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.add-people-btn:hover {
+  background-color: #d1555a;
+  transform: translateY(-2px);
+}
+
+/* Search Container in Modal */
+.search-container {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.searching-text {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.no-results {
+  color: #999;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Search Dropdown */
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  margin-top: 4px;
+}
+
+.search-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+  background-color: #f5f5f5;
+}
+
+.search-result-item:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.search-result-item:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.search-result-item:only-child {
+  border-radius: 8px;
+}
+
+.add-icon {
+  color: #fe696e;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.adding-text {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+/* Current Members List */
+.current-members {
+  margin-bottom: 1.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.current-members h3 {
+  color: #343434;
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+}
+
+.current-members ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.current-members li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #343434;
+}
+
+.current-members li:last-child {
+  border-bottom: none;
+}
+
+.admin-badge {
+  background-color: #fe696e;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+}

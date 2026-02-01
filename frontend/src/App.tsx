@@ -15,7 +15,7 @@ function App() {
         <Route path="/dashboard/:userId" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/squad" element={<Squad />} />
+        <Route path="/squad/:squadId" element={<Squad />} />
         <Route path="/not-found" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
