@@ -11,7 +11,10 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-brand">
-          <h1 onClick={() => navigate('/squad')}>Who's Got Mom?</h1>
+          <button className="brand-button" onClick={() => navigate('/squad')}>
+            <img src="/WGM_icon.png" alt="Who's Got Mom Logo" className="brand-logo" />
+            <span>Who's Got Mom?</span>
+          </button>
         </div>
         <ul className="navbar-menu">
           <li>

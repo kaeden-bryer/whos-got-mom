@@ -1,3 +1,7 @@
+:root {
+  --themecolor: #fe696e;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -177,7 +181,12 @@ label {
 }
 
 hr {
-border-top: 2px solid #fe696e;
+  border-top: 2px solid var(--themecolor);
+}
+
+.hrstyles {
+  border-top: 2px solid var(--themecolor);
+  transition: border-color 0.3s ease;
 }
 
 /* Dashboard Section Title */

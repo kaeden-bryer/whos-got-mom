@@ -2,7 +2,7 @@
 export let wheelNames: string[] = [];
 let currentRotation = 0; // Track the current rotation in degrees
 let isSpinning = false; // Prevent multiple spins at once
-const wheelColors = ['#FC91DD','#D36CFC','#FC6D71','#6AE49B','#766CFC','#8957F7','#170AC2','#FBA66D','#FA5454','#66CC00'];
+export const wheelColors = ['#FC91DD','#D36CFC','#FC6D71','#6AE49B','#766CFC','#8957F7','#170AC2','#FBA66D','#FA5454','#66CC00'];
 
 export let careTaker = "";
 export let cgi = 0;
