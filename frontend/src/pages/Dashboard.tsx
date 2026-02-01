@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { API_URL } from '../config/env';
+import Navbar from '../components/Navbar';
 
 interface User {
   id: string;
@@ -42,7 +43,9 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div>
+    <div className="Mn">
+      <Navbar />
+      <div className="BH_DS">
       <h1>Dashboard - {user}</h1>
       <p>Welcome to your dashboard, {user}!</p>
       
@@ -78,6 +81,7 @@ export default function Dashboard() {
           </tbody>
         </table>
       )}
+      </div>
     </div>
   );
 }
