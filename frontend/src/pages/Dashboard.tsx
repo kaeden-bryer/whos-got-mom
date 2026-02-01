@@ -20,7 +20,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Fetch all users from the backend
-    fetch(`${API_URL}/users`)
+    fetch(`${API_URL}/api/users`)
       .then(response => {
         // Check if response is ok (status 200-299)
         if (!response.ok) {
