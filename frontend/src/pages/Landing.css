@@ -1,0 +1,286 @@
+.landing-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fef5f5 0%, #fff 100%);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Mouse glow effect - velocity-based sizing */
+.glow-overlay {
+    --glow-size: 100px;  /* Default min size, dynamically updated by JS */
+    --glow-color: #fe696e;
+    --glow-opacity: 0;
+    --glow-x: 50%;
+    --glow-y: 50%;
+
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: var(--glow-opacity);
+    background: radial-gradient(
+        var(--glow-size) var(--glow-size) at var(--glow-x) var(--glow-y),
+        rgba(254, 105, 110, 0.3) 0%,
+        rgba(254, 105, 110, 0.15) 30%,
+        rgba(254, 105, 110, 0.05) 50%,
+        transparent 70%
+    );
+    transition: opacity 400ms ease;
+    will-change: background, opacity;
+}
+
+.landing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4rem;
+    padding: 2rem;
+    width: 90vw;
+    max-width: 1400px;
+    position: relative;
+    min-height: 70vh;
+    z-index: 1;
+}
+
+/* Logo animations */
+.logo-container {
+    animation: logoFadeIn 1s ease-out forwards;
+    opacity: 0;
+    position: absolute;
+    top: 2rem;
+    right: 4rem;
+    z-index: 10;
+}
+
+.wgm-logo {
+    width: 25vw;
+    height: auto;
+    filter: drop-shadow(0 10px 20px rgba(254, 105, 110, 0.2));
+    transition: transform 0.3s ease;
+    transform: rotate(10deg);
+}
+
+.wgm-logo:hover {
+    transform: rotate(15deg) scale(1.05);
+}
+
+@keyframes logoFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) rotate(5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(15deg);
+    }
+}
+
+/* Title container - stepped layout */
+.title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 50%;   
+}
+
+.title-word {
+    font-size: 6rem;
+    font-weight: 700;
+    color: #fe696e;
+    margin: 0;
+    opacity: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Stagger effect - each word appears at a different time */
+.title-word-1 {
+    animation: titleFlyIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+    margin-left: 0%;
+}
+
+.title-word-2 {
+    animation: titleFlyIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s forwards;
+    margin-left: 40%;
+}
+
+.title-word-3 {
+    animation: titleFlyIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s forwards;
+    margin-left: 66%;
+}
+
+@keyframes titleFlyIn {
+    0% {
+        opacity: 0;
+        transform: translateY(150px) scale(0.5) rotate(-25deg);
+    }
+    40% {
+        opacity: 1;
+        transform: translateY(-15px) scale(1.08) rotate(12deg);
+    }
+    60% {
+        transform: translateY(5px) scale(0.98) rotate(-5deg);
+    }
+    75% {
+        transform: translateY(-3px) scale(1.02) rotate(2deg);
+    }
+    90% {
+        transform: translateY(0) scale(1) rotate(-0.5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 3rem;
+    align-self: center;
+}
+
+.landing-btn {
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-btn {
+    background-color: #fe696e;
+    color: white;
+    animation: buttonSlideIn 0.6s ease-out 1.2s forwards;
+    transform: translateX(-100px);
+}
+
+.signup-btn {
+    background-color: white;
+    color: #fe696e;
+    border: 2px solid #fe696e;
+    animation: buttonSlideIn 0.6s ease-out 1.4s forwards;
+    transform: translateX(100px);
+}
+
+@keyframes buttonSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(var(--initial-x, 0)) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Hover effects */
+.login-btn:hover {
+    background-color: #d1555a;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(254, 105, 110, 0.3);
+}
+
+.signup-btn:hover {
+    background-color: #fe696e;
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(254, 105, 110, 0.3);
+}
+
+/* Active/click effect */
+.landing-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .landing-content {
+        flex-direction: column;
+        gap: 2rem;
+        padding-top: 8rem;
+    }
+    
+    .logo-container {
+        top: 1rem;
+        right: 1rem;
+    }
+    
+    .wgm-logo {
+        width: 250px;
+    }
+    
+    .title-container {
+        align-items: center;
+    }
+    
+    .title-word {
+        font-size: 4rem;
+    }
+    
+    .title-word-1,
+    .title-word-2,
+    .title-word-3 {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .landing-content {
+        padding-top: 6rem;
+    }
+    
+    .logo-container {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .wgm-logo {
+        width: 180px;
+    }
+    
+    .title-word {
+        font-size: 3rem;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .landing-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-container {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .wgm-logo {
+        width: 120px;
+    }
+    
+    .title-word {
+        font-size: 2.5rem;
+    }
+    
+    .landing-btn {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+}
