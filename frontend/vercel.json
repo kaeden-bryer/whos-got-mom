@@ -1,6 +1,10 @@
 {
     "rewrites": [
       {
+        "source": "/api/:path*",
+        "destination": "https://whos-got-mom-api.vercel.app/users/:path*"
+      },
+      {
         "source": "/(.*)",
         "destination": "/index.html"
       }
