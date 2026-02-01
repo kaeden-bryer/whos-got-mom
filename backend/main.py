@@ -12,7 +12,11 @@ url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_ANON_KEY")
 
 # Use this client for standard user-scoped operations
-supabase: Client = create_client(url, key)
+try:
+    supabase: Client = create_client(url, key)
+    print("Supabase client created successfully")
+except Exception as e:
+    print(f"ERROR creating Supabase client: {str(e)}")
 
 app = FastAPI()
 
@@ -78,10 +82,11 @@ def health_check():
 
 async def get_users():
     try:
-        response = supabase.table("user").select("*").execute()
+        response = supabase.table("users").select("*").execute()
         
         # Check if the response has data
         if response.data is None:
+            print("DEBUG - No data found, returning 404")
             return JSONResponse(
                 status_code=404,
                 content={"message": "No users found", "data": []}
@@ -96,8 +101,6 @@ async def get_users():
         )
     
     except Exception as e:
-        # Log the error for debugging
-        print(f"Error fetching users: {str(e)}")
         return JSONResponse(
             status_code=500,
             content={"message": f"Internal server error: {str(e)}", "data": []}
