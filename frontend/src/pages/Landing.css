@@ -5,6 +5,32 @@
     justify-content: center;
     background: linear-gradient(135deg, #fef5f5 0%, #fff 100%);
     overflow: hidden;
+    position: relative;
+}
+
+/* Mouse glow effect - velocity-based sizing */
+.glow-overlay {
+    --glow-size: 100px;  /* Default min size, dynamically updated by JS */
+    --glow-color: #fe696e;
+    --glow-opacity: 0;
+    --glow-x: 50%;
+    --glow-y: 50%;
+
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: var(--glow-opacity);
+    background: radial-gradient(
+        var(--glow-size) var(--glow-size) at var(--glow-x) var(--glow-y),
+        rgba(254, 105, 110, 0.3) 0%,
+        rgba(254, 105, 110, 0.15) 30%,
+        rgba(254, 105, 110, 0.05) 50%,
+        transparent 70%
+    );
+    transition: opacity 400ms ease;
+    will-change: background, opacity;
 }
 
 .landing-content {
@@ -18,6 +44,7 @@
     max-width: 1400px;
     position: relative;
     min-height: 70vh;
+    z-index: 1;
 }
 
 /* Logo animations */
