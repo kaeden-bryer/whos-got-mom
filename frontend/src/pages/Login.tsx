@@ -2,7 +2,7 @@ export default function Login() {
   return (
     <div className="Mn">
       <div id="WGM_logo">
-      <img src="src/assets/WGM_Logo.png" alt="Who's Got Mom Logo" style={{ width: '200px', marginBottom: '1rem' }} />
+      <img src="/WGM_logo.png" alt="Who's Got Mom Logo" style={{ width: '200px', marginBottom: '1rem' }} />
       </div>
       <h1 id="login-header">Sign in</h1>
       <form>
