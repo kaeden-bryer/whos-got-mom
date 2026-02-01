@@ -57,6 +57,13 @@ a:hover {
   font-family: system-ui, Avenir, Arial, Helvetica, sans-serif;
 }
 
+/* Content wrapper for pages with fixed navbar */
+.page-content {
+  padding-top: 95px; /* navbar height (75px) + extra spacing (20px) */
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 /* Body text element styles (my shit) */
 
 .BH_DS {
