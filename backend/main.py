@@ -16,6 +16,10 @@ app.add_middleware(
 def root():
     return {"status": "OK"}
 
+@app.get("/health")
+def health_check():
+    return {"status": "OK"}
+
 @app.get("/test")
 def test_route():
     return "Hello world!"
