@@ -76,3 +76,45 @@ a:hover {
   display: flex;
   justify-content: center;
 }
+
+/* THE WHEEL */
+
+.action-btn {
+  background: #3498db;
+  margin-top: 10px;
+}
+
+
+
+label {
+  margin-top: 15px;
+  display: block;
+  font-weight: bold;
+}
+
+#wheel {
+  display: flex;
+  justify-content: center;
+
+
+}
+
+#WGM_label_squad {
+  display: flex;
+  justify-content: center;
+
+
+}
+
+#Pointer {
+  width: 10px; 
+  height: 10px; 
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #f00;
+
+}
+
+hr {
+border-top: 2px solid #fe696e;
+}
