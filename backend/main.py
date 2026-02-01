@@ -23,7 +23,10 @@ app = FastAPI()
 # Configure CORS to allow frontend requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your frontend URL
+    allow_origins=[
+        "https://whos-got-mom-ui-kaeden-bryers-projects.vercel.app",
+        "http://localhost:5173"
+    ],  # In production, specify your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
