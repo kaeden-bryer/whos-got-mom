@@ -1,7 +1,8 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  /* add top offset so fixed navbar doesn't cover content (navbar ~64px) */
+  padding: calc(2rem + 64px) 2rem 2rem 2rem;
 }
 
 h1 {
@@ -35,24 +36,43 @@ input {
 
 button {
   padding: 0.75rem;
-  background-color: #646cff;
-  color: white;
+  background-color: #fe696e;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.25s;
+  color: white;
 }
 
 button:hover {
-  background-color: #535bf2;
-}
-
-a {
-  color: #646cff;
-  text-decoration: none;
+  background-color: #d1555a;
 }
 
 a:hover {
   text-decoration: underline;
+}
+
+.Mn {
+  font-family: system-ui, Avenir, Arial, Helvetica, sans-serif;
+}
+
+/* Body text element styles (my shit) */
+
+.BH_DS {
+  color: #343434;
+}
+
+
+/*literally just the login header*/
+#login-header {
+  color: #fe696e;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20pxs;
+}
+
+#WGM_logo {
+  display: flex;
+  justify-content: center;
 }
