@@ -26,7 +26,8 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Login successful - navigate to dashboard with userId
+        // Login successful - store userId and navigate to dashboard
+        localStorage.setItem('userId', data.userId);
         navigate(`/dashboard/${data.userId}`);
       } else {
         // Login failed - show error message

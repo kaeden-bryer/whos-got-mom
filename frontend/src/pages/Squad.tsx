@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { API_URL } from '../config/env';
 
-import { drawWheel, spinWheel, careTaker, setOnSpinComplete } from '../utils/wheel';
+import { drawWheel, spinWheel, careTaker, cgi, setOnSpinComplete, wheelColors } from '../utils/wheel';
 
 import Navbar from '../components/Navbar';
 
@@ -33,6 +33,21 @@ export default function Squad() {
   // Squad members state
   const [members, setMembers] = useState<SquadMember[]>([]);
   const [membersLoading, setMembersLoading] = useState(true);
+
+  // Default theme color constant
+  const DEFAULT_THEME_COLOR = '#fe696e';
+
+  // Helper to update theme color
+  const setThemeColor = (color: string) => {
+    document.documentElement.style.setProperty('--themecolor', color);
+  };
+
+  // Reset theme color when leaving the page
+  useEffect(() => {
+    return () => {
+      setThemeColor(DEFAULT_THEME_COLOR);
+    };
+  }, []);
   
   // Add People modal state
   const [showAddPeopleModal, setShowAddPeopleModal] = useState(false);
@@ -71,6 +86,9 @@ export default function Squad() {
       setOnSpinComplete(() => {
         setCurrentCareTaker(careTaker);
         setIsSpinning(false);
+        // Update theme color to match the winner's wheel segment
+        const winnerColor = wheelColors[cgi % wheelColors.length];
+        setThemeColor(winnerColor);
       });
 
       // Extract full names from members

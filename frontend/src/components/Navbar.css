@@ -4,9 +4,10 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: #fe696e;
+  background-color: var(--themecolor);
   /* vertical padding moved into container for consistent height */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
 .navbar-container {
@@ -27,6 +28,33 @@
   transition: color 0.3s ease;
 }
 
+.brand-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.brand-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.brand-button span {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+}
 
 .navbar-menu {
   display: flex;

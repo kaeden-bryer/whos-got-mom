@@ -7,6 +7,15 @@ import NotFound from './pages/NotFound';
 import Landing from './pages/Landing';
 import './App.css';
 
+// Component to handle catch-all redirect based on auth state
+function CatchAllRedirect() {
+  const userId = localStorage.getItem('userId');
+  if (userId) {
+    return <Navigate to={`/dashboard/${userId}`} replace />;
+  }
+  return <Navigate to="/" replace />;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -17,7 +26,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/squad/:squadId" element={<Squad />} />
         <Route path="/not-found" element={<NotFound />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<CatchAllRedirect />} />
       </Routes>
     </BrowserRouter>
   );
