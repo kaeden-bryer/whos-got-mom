@@ -29,6 +29,11 @@ class LoginRequest(BaseModel):
     username: str = Field(..., min_length=1, description="User's username")
     password: str = Field(..., min_length=1, description="User's password")
 
+# Pydantic model for squad creation
+class CreateSquadRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100, description="Name of the squad")
+    nameMom: str = Field(..., min_length=1, max_length=100, description="Name of mom")
+
 # Use this client for standard user-scoped operations
 try:
     supabase: Client = create_client(url, key)
@@ -387,6 +392,136 @@ async def create_user(user: CreateUserRequest):
         return JSONResponse(
             status_code=500,
             content={"message": f"Internal server error: {error_message}", "data": None}
+        )
+
+
+@app.get(
+    "/squads",
+    responses={
+        200: {
+            "description": "Squads fetched successfully",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "Squads fetched successfully",
+                        "data": [
+                            {
+                                "id": "550e8400-e29b-41d4-a716-446655440000",
+                                "name": "Smith Family",
+                                "nameMom": "Jane Smith"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        404: {
+            "description": "No squads found",
+            "content": {
+                "application/json": {
+                    "example": {"message": "No squads found", "data": []}
+                }
+            }
+        },
+        500: {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Internal server error: Database connection failed", "data": []}
+                }
+            }
+        }
+    }
+)
+async def get_squads():
+    try:
+        response = supabase.table("squad").select("id, name, nameMom").execute()
+        
+        if response.data is None:
+            return JSONResponse(
+                status_code=404,
+                content={"message": "No squads found", "data": []}
+            )
+        
+        squads_data = response.data if isinstance(response.data, list) else []
+        
+        return JSONResponse(
+            status_code=200,
+            content={"message": "Squads fetched successfully", "data": squads_data}
+        )
+    
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"Internal server error: {str(e)}", "data": []}
+        )
+
+
+@app.post(
+    "/squads",
+    responses={
+        201: {
+            "description": "Squad created successfully",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "Squad created successfully",
+                        "data": {
+                            "id": "550e8400-e29b-41d4-a716-446655440000",
+                            "name": "Smith Family",
+                            "nameMom": "Jane Smith"
+                        }
+                    }
+                }
+            }
+        },
+        500: {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Internal server error: Database connection failed", "data": None}
+                }
+            }
+        }
+    }
+)
+async def create_squad(squad: CreateSquadRequest):
+    """
+    Create a new squad with auto-generated UUID.
+    
+    Sample Postman request body:
+    {
+        "name": "Smith Family",
+        "nameMom": "Jane Smith"
+    }
+    """
+    try:
+        # Generate unique ID and prepare squad data
+        squad_id = str(uuid.uuid4())
+        squad_data = {
+            "id": squad_id,
+            "name": squad.name.strip(),
+            "nameMom": squad.nameMom.strip()
+        }
+        
+        # Insert squad into Supabase
+        response = supabase.table("squad").insert(squad_data).execute()
+        
+        if response.data:
+            return JSONResponse(
+                status_code=201,
+                content={"message": "Squad created successfully", "data": response.data[0]}
+            )
+        else:
+            return JSONResponse(
+                status_code=500,
+                content={"message": "Failed to create squad", "data": None}
+            )
+    
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"Internal server error: {str(e)}", "data": None}
         )
 
 
