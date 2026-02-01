@@ -6,13 +6,16 @@ import uvicorn
 import os
 import uuid
 import re
+from datetime import datetime
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
 load_dotenv()
 
 url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_ANON_KEY")
+# Use service key for backend operations (bypasses RLS)
+# Falls back to anon key if service key is not set
+key: str = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_ANON_KEY")
 
 
 # Pydantic model for user creation
@@ -33,6 +36,12 @@ class LoginRequest(BaseModel):
 class CreateSquadRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=100, description="Name of the squad")
     nameMom: str = Field(..., min_length=1, max_length=100, description="Name of mom")
+    user_id: str = Field(..., description="ID of the user creating the squad (will become admin)")
+
+# Pydantic model for squad membership creation
+class CreateSquadMembershipRequest(BaseModel):
+    user_id: str = Field(..., description="ID of the user to add")
+    squad_id: str = Field(..., description="ID of the squad")
 
 # Use this client for standard user-scoped operations
 try:
@@ -144,6 +153,81 @@ async def login(credentials: LoginRequest):
             status_code=500,
             content={"message": f"Internal server error: {str(e)}"}
         )
+
+
+@app.get(
+    "/users/search",
+    responses={
+        200: {
+            "description": "Users found",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "Users found",
+                        "data": [
+                            {
+                                "id": "user-uuid",
+                                "nameFirst": "John",
+                                "nameLast": "Doe"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        500: {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Internal server error", "data": []}
+                }
+            }
+        }
+    }
+)
+async def search_users(q: str = ""):
+    """
+    Search users by first name (case-insensitive partial match).
+    
+    Query parameters:
+    - q: Search query to match against nameFirst
+    """
+    try:
+        if not q:
+            return JSONResponse(
+                status_code=200,
+                content={"message": "No search query provided", "data": []}
+            )
+        
+        # Fetch all users and filter in Python for compatibility
+        response = supabase.table("users").select("id, nameFirst, nameLast").execute()
+        
+        if not response.data:
+            return JSONResponse(
+                status_code=200,
+                content={"message": "No users found", "data": []}
+            )
+        
+        # Filter users whose nameFirst contains the search query (case-insensitive)
+        q_lower = q.lower()
+        filtered_users = [
+            user for user in response.data 
+            if user.get("nameFirst", "").lower().startswith(q_lower) or 
+               q_lower in user.get("nameFirst", "").lower()
+        ]
+        
+        return JSONResponse(
+            status_code=200,
+            content={"message": "Users found", "data": filtered_users}
+        )
+    
+    except Exception as e:
+        print(f"Search error: {str(e)}")  # Log the error for debugging
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"Internal server error: {str(e)}", "data": []}
+        )
+
 
 @app.get(
     "/users/{user_id}",
@@ -488,11 +572,13 @@ async def get_squads():
 async def create_squad(squad: CreateSquadRequest):
     """
     Create a new squad with auto-generated UUID.
+    Also creates a squad membership for the creator as admin.
     
     Sample Postman request body:
     {
         "name": "Smith Family",
-        "nameMom": "Jane Smith"
+        "nameMom": "Jane Smith",
+        "user_id": "550e8400-e29b-41d4-a716-446655440000"
     }
     """
     try:
@@ -508,6 +594,17 @@ async def create_squad(squad: CreateSquadRequest):
         response = supabase.table("squad").insert(squad_data).execute()
         
         if response.data:
+            # Create squad membership for the creator as admin
+            membership_id = str(uuid.uuid4())
+            membership_data = {
+                "id": membership_id,
+                "user_id": squad.user_id,
+                "squad_id": squad_id,
+                "primary": True,  # Creator is admin
+                "joined_at": datetime.utcnow().isoformat()
+            }
+            supabase.table("user_squad_memberships").insert(membership_data).execute()
+            
             return JSONResponse(
                 status_code=201,
                 content={"message": "Squad created successfully", "data": response.data[0]}
@@ -516,6 +613,231 @@ async def create_squad(squad: CreateSquadRequest):
             return JSONResponse(
                 status_code=500,
                 content={"message": "Failed to create squad", "data": None}
+            )
+    
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"Internal server error: {str(e)}", "data": None}
+        )
+
+
+@app.get(
+    "/squad-memberships",
+    responses={
+        200: {
+            "description": "Squad memberships fetched successfully",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "Squad memberships fetched successfully",
+                        "data": [
+                            {
+                                "id": "550e8400-e29b-41d4-a716-446655440000",
+                                "user_id": "user-uuid",
+                                "squad_id": "squad-uuid",
+                                "primary": True,
+                                "joined_at": "2024-01-15T10:30:00"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        500: {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Internal server error: Database connection failed", "data": []}
+                }
+            }
+        }
+    }
+)
+async def get_squad_memberships(squad_id: str = None):
+    """
+    Get all squad memberships, optionally filtered by squad_id.
+    
+    Query parameters:
+    - squad_id (optional): Filter memberships by squad ID
+    """
+    try:
+        query = supabase.table("user_squad_memberships").select("id, user_id, squad_id, primary, joined_at")
+        
+        if squad_id:
+            query = query.eq("squad_id", squad_id)
+        
+        response = query.execute()
+        
+        if response.data is None:
+            return JSONResponse(
+                status_code=200,
+                content={"message": "No squad memberships found", "data": []}
+            )
+        
+        memberships_data = response.data if isinstance(response.data, list) else []
+        
+        return JSONResponse(
+            status_code=200,
+            content={"message": "Squad memberships fetched successfully", "data": memberships_data}
+        )
+    
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"Internal server error: {str(e)}", "data": []}
+        )
+
+
+@app.get(
+    "/squad-memberships/{squad_id}/members",
+    responses={
+        200: {
+            "description": "Squad members fetched successfully with user details",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "Squad members fetched successfully",
+                        "data": [
+                            {
+                                "id": "membership-uuid",
+                                "user_id": "user-uuid",
+                                "squad_id": "squad-uuid",
+                                "primary": True,
+                                "joined_at": "2024-01-15T10:30:00",
+                                "user": {
+                                    "id": "user-uuid",
+                                    "nameFirst": "John",
+                                    "nameLast": "Doe"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        500: {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Internal server error: Database connection failed", "data": []}
+                }
+            }
+        }
+    }
+)
+async def get_squad_members(squad_id: str):
+    """
+    Get all members of a specific squad with their user details.
+    """
+    try:
+        # Get all memberships for this squad
+        memberships_response = supabase.table("user_squad_memberships").select("*").eq("squad_id", squad_id).execute()
+        
+        if not memberships_response.data:
+            return JSONResponse(
+                status_code=200,
+                content={"message": "No members found", "data": []}
+            )
+        
+        # Get user details for each membership
+        members_with_details = []
+        for membership in memberships_response.data:
+            user_response = supabase.table("users").select("id, nameFirst, nameLast").eq("id", membership["user_id"]).execute()
+            if user_response.data:
+                membership["user"] = user_response.data[0]
+            members_with_details.append(membership)
+        
+        return JSONResponse(
+            status_code=200,
+            content={"message": "Squad members fetched successfully", "data": members_with_details}
+        )
+    
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"Internal server error: {str(e)}", "data": []}
+        )
+
+
+@app.post(
+    "/squad-memberships",
+    responses={
+        201: {
+            "description": "Squad membership created successfully",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "Squad membership created successfully",
+                        "data": {
+                            "id": "550e8400-e29b-41d4-a716-446655440000",
+                            "user_id": "user-uuid",
+                            "squad_id": "squad-uuid",
+                            "primary": False,
+                            "joined_at": "2024-01-15T10:30:00"
+                        }
+                    }
+                }
+            }
+        },
+        409: {
+            "description": "User already in squad",
+            "content": {
+                "application/json": {
+                    "example": {"message": "User is already a member of this squad", "data": None}
+                }
+            }
+        },
+        500: {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Internal server error: Database connection failed", "data": None}
+                }
+            }
+        }
+    }
+)
+async def create_squad_membership(membership: CreateSquadMembershipRequest):
+    """
+    Add a user to a squad.
+    
+    Sample Postman request body:
+    {
+        "user_id": "550e8400-e29b-41d4-a716-446655440000",
+        "squad_id": "660e8400-e29b-41d4-a716-446655440000"
+    }
+    """
+    try:
+        # Check if user is already a member of this squad
+        existing = supabase.table("user_squad_memberships").select("id").eq("user_id", membership.user_id).eq("squad_id", membership.squad_id).execute()
+        if existing.data and len(existing.data) > 0:
+            return JSONResponse(
+                status_code=409,
+                content={"message": "User is already a member of this squad", "data": None}
+            )
+        
+        # Create membership
+        membership_id = str(uuid.uuid4())
+        membership_data = {
+            "id": membership_id,
+            "user_id": membership.user_id,
+            "squad_id": membership.squad_id,
+            "primary": False,  # New members are not admins
+            "joined_at": datetime.utcnow().isoformat()
+        }
+        
+        response = supabase.table("user_squad_memberships").insert(membership_data).execute()
+        
+        if response.data:
+            return JSONResponse(
+                status_code=201,
+                content={"message": "Squad membership created successfully", "data": response.data[0]}
+            )
+        else:
+            return JSONResponse(
+                status_code=500,
+                content={"message": "Failed to create squad membership", "data": None}
             )
     
     except Exception as e:
