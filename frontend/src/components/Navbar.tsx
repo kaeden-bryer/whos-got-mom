@@ -38,7 +38,7 @@ export default function Navbar() {
               className="nav-link logout"
               onClick={() => {
                 // Add logout logic here
-                navigate('/login');
+                navigate('/');
               }}
             >
               Logout
