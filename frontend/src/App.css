@@ -2,3 +2,29 @@ h1, h2, h3, h4, h5, h6{
   color: black;
 }
 
+h5{
+  font-weight: normal;
+}
+
+input{
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 13px;
+    margin: 5px;
+}
+
+::placeholder{
+    color: #fe696e;
+}
+
+button{
+  background-color: #fe696e;
+  display: flex;
+  padding: 15px 50px;
+  border-radius: 0px;
+  border: 0.5px solid black;
+  margin: 25px;
+}
+/*tried to move button to the right*/
+

@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-
+//simple input field that saves input in username variable
 function Username() {
     const [name, setName] = useState("");
 

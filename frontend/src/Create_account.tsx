@@ -6,5 +6,6 @@ function Create_account() {
         </div>
     );
 }
+//create account page which should have fields for first/last name, email, phone and password
 
 export default Create_account;
